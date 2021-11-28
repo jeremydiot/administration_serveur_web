@@ -1,0 +1,29 @@
+version: '3'
+services:
+  nginx:
+    image: bitnami/nginx:latest
+    depends_on:
+      - phpfpm
+    ports:
+      - 8000:8000
+      - 8443:8443
+    volumes:
+      - ./app:/app
+      - ./conf.d:/opt/bitnami/nginx/conf/server_blocks:ro
+      - ./nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro
+      - ./cert:/opt/bitnami/nginx/cert:ro
+    networks:
+      - app-tier
+
+  phpfpm:
+    image: 'bitnami/php-fpm:latest'
+    expose:
+      - 9000
+    volumes:
+      - ./app:/app
+    networks:
+      - app-tier
+
+networks:
+  app-tier:
+    driver: bridge

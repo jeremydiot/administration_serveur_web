@@ -1,0 +1,39 @@
+version: '3'
+services:
+  nginx:
+    image: bitnami/nginx:latest
+    depends_on:
+      - apache1
+      - apache2
+    ports:
+      - 8000:8000
+    volumes:
+      - ./conf.d:/opt/bitnami/nginx/conf/server_blocks:ro
+    networks:
+      - app-tier
+
+  apache1:
+    image: 'bitnami/apache:latest'
+    expose:
+      - 8080
+    volumes:
+      - ./app:/app
+    networks:
+      - app-tier
+    environment:
+      - APACHE_HTTP_PORT_NUMBER=8080
+
+  apache2:
+    image: 'bitnami/apache:latest'
+    expose:
+      - 8080
+    volumes:
+      - ./app:/app
+    networks:
+      - app-tier
+    environment:
+      - APACHE_HTTP_PORT_NUMBER=8080
+
+networks:
+  app-tier:
+    driver: bridge
