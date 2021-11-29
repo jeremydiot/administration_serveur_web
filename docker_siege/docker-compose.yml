@@ -1,0 +1,9 @@
+version: '3'
+services:
+  siege:
+    image: 'yokogawa/siege'
+    # volumes:
+    #   - ./log:/var/log:rw
+    network_mode: host
+    entrypoint: ["siege","-d1", "-r10", "-c1000", "https://nathangonzalez.fr/"]
+    
